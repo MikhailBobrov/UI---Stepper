@@ -5,8 +5,7 @@
 const App = {
   data() {
     return {
-      btnNameNext: 'Вперед',
-      isPressedBtnEnd: false,
+      isActive: true,
       activeIndex: 0, // то, что позволяет определить текущий активный шаг
       steps: [
         {title: 'Основы', text: 'В блоке вы познакомитесь со всеми основами Vue.js на практике. На протяжении блока мы напишем реактивное приложение, в процессе разработки которого разберем вся базу фреймворка.'},
@@ -20,48 +19,42 @@ const App = {
   methods: {
     prev() {
       // когда нажимаем кнопку назад
-      if (this.activeIndex > 0) {
+      if (this.activeIndex !== 0) {
         this.activeIndex--
       }
-
     },
     reset() {
       // начать заново
       this.activeIndex = 0
-      this.isPressedBtnEnd = false
-      },
-
+      this.isActive = true
+    },
     nextOfFinish() {
       // кнопка вперед или закончить
-      if (this.activeIndex < this.steps.length - 1) {
+      if (this.activeIndex !== this.steps.length-1) {
         this.activeIndex++
-      }
-      if (this.btnNameNext ==='Закончить') {
-        this.isPressedBtnEnd = true
+      } else {
+        this.isActive = false
       }
     },
     setActive(idx) {
       // когда нажимаем на определенный шаг
-      if (this.isPressedBtnEnd === false) {
-        this.activeIndex = idx
-      }
+      this.activeIndex = idx
     }
-
   },
   computed: {
     // тут стоит определить несколько свойств:
     // 1. текущий выбранный шаг
-    currentStep(){
-      return this.steps[this.activeIndex].text
+    activeStep(){
+      return this.steps[this.activeIndex]
     },
     // 2. выключена ли кнопка назад
-    isDisabledButton() {
-      return !this.activeIndex
+    prevDisabled(){
+      return this.activeIndex === 0
     },
     // 3. находимся ли мы на последнем шаге
-    isFinishStep() {
-      return this.activeIndex === this.steps.length-1 ? this.btnNameNext = 'Закончить' : this.btnNameNext = 'Вперед'
-    },
+    isLastStep(){
+      return this.activeIndex === this.steps.length - 1
+    }
   }
 }
 
